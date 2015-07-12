@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/h_window_padding"
+              android:paddingLeft="@dimen/v_window_padding"
+              android:paddingRight="@dimen/v_window_padding"
+              android:paddingTop="@dimen/h_window_padding">
+
+    <Button
+        android:id="@+id/btn_triangle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_btn_triangle"/>
+
+    <Button
+        android:id="@+id/btn_cube"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_btn_cube"/>
+
+</LinearLayout>
