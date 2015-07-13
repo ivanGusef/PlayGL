@@ -11,15 +11,17 @@ import java.nio.ShortBuffer;
  * Created by Иван on 11.07.2015.
  */
 public abstract class Shape {
-    protected int BYTES_PER_FLOAT   = 4;
-    protected int BYTES_PER_SHORT   = 2;
-    protected int COORDS_PER_VERTEX = 3;
-    protected int COORDS_PER_NORMAL = 3;
-    protected int COORDS_PER_COLOR  = 4;
+    protected int BYTES_PER_FLOAT    = 4;
+    protected int BYTES_PER_SHORT    = 2;
+    protected int COORDS_PER_VERTEX  = 3;
+    protected int COORDS_PER_NORMAL  = 3;
+    protected int COORDS_PER_COLOR   = 4;
+    protected int COORDS_PER_TEXTURE = 2;
 
-    protected int VERTEX_STRIDE = COORDS_PER_VERTEX * BYTES_PER_FLOAT;
-    protected int COLOR_STRIDE  = COORDS_PER_COLOR * BYTES_PER_FLOAT;
-    protected int NORMAL_STRIDE = COORDS_PER_NORMAL * BYTES_PER_FLOAT;
+    protected int VERTEX_STRIDE  = COORDS_PER_VERTEX * BYTES_PER_FLOAT;
+    protected int COLOR_STRIDE   = COORDS_PER_COLOR * BYTES_PER_FLOAT;
+    protected int NORMAL_STRIDE  = COORDS_PER_NORMAL * BYTES_PER_FLOAT;
+    protected int TEXTURE_STRIDE = COORDS_PER_TEXTURE * BYTES_PER_FLOAT;
 
     private final ShaderProgram mProgram;
 

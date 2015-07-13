@@ -8,6 +8,8 @@ import com.ivangusef.android.playgl.gl.Shape;
 
 import java.nio.FloatBuffer;
 
+import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.glGenerateMipmap;
 import static android.opengl.GLES30.GL_TRIANGLES;
 import static android.opengl.GLES30.glDrawArrays;
 
@@ -16,7 +18,7 @@ import static android.opengl.GLES30.glDrawArrays;
  */
 public final class Cube extends Shape {
 
-    private static final float[] COORDS  = {
+    private static final float[] COORDS     = {
             // Front face
             -1.0f, 1.0f, 1.0f,
             -1.0f, -1.0f, 1.0f,
@@ -65,7 +67,7 @@ public final class Cube extends Shape {
             -1.0f, -1.0f, 1.0f,
             -1.0f, -1.0f, -1.0f,
     };
-    private static final float[] NORMALS = {
+    private static final float[] NORMALS    = {
             // Front face
             0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f,
@@ -114,7 +116,7 @@ public final class Cube extends Shape {
             0.0f, -1.0f, 0.0f,
             0.0f, -1.0f, 0.0f
     };
-    private static final float[] COLORS  = {
+    private static final float[] COLORS     = {
             // Front face (red)
             1.0f, 0.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f,
@@ -163,15 +165,73 @@ public final class Cube extends Shape {
             1.0f, 0.0f, 1.0f, 1.0f,
             1.0f, 0.0f, 1.0f, 1.0f
     };
+    private static final float[] TEX_COORDS = {
+            // Front face
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+
+            // Right face
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+
+            // Back face
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+
+            // Left face
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+
+            // Top face
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+
+            // Bottom face
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f
+    };
 
     private final FloatBuffer mVertexBuffer;
     private final FloatBuffer mNormalBuffer;
     private final FloatBuffer mColorBuffer;
+    //private final FloatBuffer mTexBuffer;
 
-    public Cube() {
+    private final int mTextureHandle;
+
+    public Cube(final int textureHandle) {
         mVertexBuffer = prepareBuffer(COORDS);
         mNormalBuffer = prepareBuffer(NORMALS);
         mColorBuffer = prepareBuffer(COLORS);
+        //mTexBuffer = prepareBuffer(TEX_COORDS);
+
+        mTextureHandle = textureHandle;
+        if (mTextureHandle != -1) {
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
     }
 
     @Override
@@ -179,12 +239,15 @@ public final class Cube extends Shape {
         super.draw(env);
 
         final ShaderProgram program = getProgram();
-        program.linkVertexBuffer(mVertexBuffer, VERTEX_STRIDE);
-        program.linkNormalBuffer(mNormalBuffer, NORMAL_STRIDE);
-        program.linkColorBuffer(mColorBuffer, COLOR_STRIDE);
+        //program.linkTextureSampler(mTextureHandle);
         program.linkModelViewProjectionMatrix(env.getMVPMatrix());
         program.linkModelViewMatrix(env.getMVMatrix());
         program.linkLightSource(env.getLightX(), env.getLightY(), env.getLightZ());
+
+        program.linkVertexBuffer(mVertexBuffer, VERTEX_STRIDE);
+        program.linkNormalBuffer(mNormalBuffer, NORMAL_STRIDE);
+        //program.linkTexture(mTexBuffer, TEXTURE_STRIDE);
+        program.linkColorBuffer(mColorBuffer, COLOR_STRIDE);
         glDrawArrays(GL_TRIANGLES, 0, COORDS.length / COORDS_PER_VERTEX);
     }
 
@@ -200,10 +263,10 @@ public final class Cube extends Shape {
                 "uniform mat4 uMVPMatrix;\n" +
                 "uniform mat4 uMVMatrix;\n" +
                 "void main() {\n" +
-                "   vPosition = vec3(uMVMatrix * vec4(aPosition, 0.0f));\n" +
-                "   vNormal = vec3(uMVMatrix * vec4(aNormal, 0.0f));\n" +
+                "   vPosition = vec3(uMVMatrix * vec4(aPosition, 0.0));\n" +
+                "   vNormal = vec3(uMVMatrix * vec4(aNormal, 0.0));\n" +
                 "   vColor = aColor;\n" +
-                "   gl_Position = uMVPMatrix * vec4(aPosition, 1.0f);\n" +
+                "   gl_Position = uMVPMatrix * vec4(aPosition, 1.0);\n" +
                 "}";
     }
 
@@ -219,10 +282,9 @@ public final class Cube extends Shape {
                 "void main() {\n" +
                 "   float distance = length(uLightPosition - vPosition);\n" +
                 "   vec3 lightVector = normalize(uLightPosition - vPosition);\n" +
-                "   float diffuse = max(dot(vNormal, lightVector), 0.0f);\n" +
-                "   diffuse = diffuse * (1.0f / (1.0f + (0.1f * distance)));\n" +
-                "   diffuse = diffuse + 0.3f;" +
-                "   fragmentColor = diffuse * vColor;\n" +
+                "   float diffuse = max(dot(vNormal, lightVector), 0.1);\n" +
+                "   diffuse = diffuse * (1.0 / (1.0 + (0.1 * distance * distance)));\n" +
+                "   fragmentColor = vColor * diffuse;\n" +
                 "}";
     }
 }

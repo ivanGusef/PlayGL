@@ -18,14 +18,14 @@ public final class CubeSurfaceView extends GLSurfaceView {
     private CubeRenderer mRenderer;
     private float        mPreviousX, mPreviousY;
 
-    public CubeSurfaceView(final Context context) {
+    public CubeSurfaceView(@NonNull final Context context) {
         this(context, null);
     }
 
-    public CubeSurfaceView(final Context context, final AttributeSet attrs) {
+    public CubeSurfaceView(@NonNull final Context context, final AttributeSet attrs) {
         super(context, attrs);
         setEGLContextClientVersion(GLUtil.VERSION_INT_GLES30);
-        setRenderer(new CubeRenderer());
+        setRenderer(new CubeRenderer(context));
         setRenderMode(RENDERMODE_WHEN_DIRTY);
         mDensity = context.getResources().getDisplayMetrics().density;
     }

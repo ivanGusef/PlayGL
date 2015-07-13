@@ -1,5 +1,6 @@
 package com.ivangusef.android.playgl.gl;
 
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.support.annotation.NonNull;
@@ -21,11 +22,17 @@ import static android.opengl.GLES30.glViewport;
  */
 public abstract class ShapeRenderer<S extends Shape> implements GLSurfaceView.Renderer {
 
-    private final Env mEnv = new Env();
+    private final Context mContext;
+    private final Env     mEnv;
 
     private S mShape;
 
     private volatile float mDeltaX, mDeltaY;
+
+    public ShapeRenderer(@NonNull final Context context) {
+        mContext = context;
+        mEnv = new Env();
+    }
 
     public void deltaX(final float deltaX) {
         mDeltaX += deltaX;
@@ -33,6 +40,10 @@ public abstract class ShapeRenderer<S extends Shape> implements GLSurfaceView.Re
 
     public void deltaY(final float deltaY) {
         mDeltaY += deltaY;
+    }
+
+    public Context getContext() {
+        return mContext;
     }
 
     public Env getEnv() {

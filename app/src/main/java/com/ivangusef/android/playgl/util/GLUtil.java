@@ -6,7 +6,8 @@ import android.content.pm.ConfigurationInfo;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import static android.opengl.GLES20.*;
+import static android.opengl.GLES20.GL_NO_ERROR;
+import static android.opengl.GLES20.glGetError;
 
 /**
  * Created by Иван on 05.07.2015.

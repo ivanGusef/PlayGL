@@ -6,10 +6,8 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
 import com.ivangusef.android.playgl.RendererActivity;
-import com.ivangusef.android.playgl.util.GLUtil;
 
 /**
  * Created by Иван on 05.07.2015.
@@ -24,6 +22,6 @@ public final class TriangleActivity extends RendererActivity {
     @Nullable
     @Override
     protected GLSurfaceView.Renderer onCreateRenderer(@Nullable final Bundle savedInstanceState) {
-        return new TriangleRenderer();
+        return new TriangleRenderer(this);
     }
 }
