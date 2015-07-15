@@ -131,7 +131,7 @@ class GestureDetector {
                         final float ptrX, ptrY;
                         ptrX = event.getX();
                         ptrY = event.getY();
-                        mListener.onTranslate((ptrX - startX) / mDensity / 2f, (ptrY - startY) / mDensity / 2f);
+                        mListener.onTranslate(translation(startX, ptrX), translation(startY, ptrY));
                         startX = ptrX;
                         startY = ptrY;
                     }
@@ -164,12 +164,16 @@ class GestureDetector {
 
     private float angleBetweenLines(final float fX, final float fY, final float sX, final float sY, final float nfX, final float nfY,
                                     final float nsX, final float nsY) {
-        float angle1 = (float) Math.atan2( (fY - sY), (fX - sX) );
-        float angle2 = (float) Math.atan2( (nfY - nsY), (nfX - nsX) );
+        float angle1 = (float) Math.atan2((fY - sY), (fX - sX));
+        float angle2 = (float) Math.atan2((nfY - nsY), (nfX - nsX));
 
-        float angle = ((float)Math.toDegrees(angle1 - angle2)) % 360;
+        float angle = ((float) Math.toDegrees(angle1 - angle2)) % 360;
         if (angle < -180.f) angle += 360.0f;
         if (angle > 180.f) angle -= 360.0f;
         return angle;
+    }
+
+    private float translation(final float start, final float end) {
+        return (end - start) / mDensity / 2f;
     }
 }
