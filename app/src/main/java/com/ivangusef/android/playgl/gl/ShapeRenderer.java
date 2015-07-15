@@ -27,7 +27,7 @@ public abstract class ShapeRenderer<S extends Shape> implements GLSurfaceView.Re
 
     private S mShape;
 
-    private volatile float mDeltaX, mDeltaY;
+    private volatile float mDeltaX, mDeltaY, mDeltaZ;
 
     public ShapeRenderer(@NonNull final Context context) {
         mContext = context;
@@ -40,6 +40,10 @@ public abstract class ShapeRenderer<S extends Shape> implements GLSurfaceView.Re
 
     public void deltaY(final float deltaY) {
         mDeltaY += deltaY;
+    }
+
+    public void deltaZ(final float deltaZ) {
+        mDeltaZ += deltaZ;
     }
 
     public Context getContext() {
@@ -113,8 +117,10 @@ public abstract class ShapeRenderer<S extends Shape> implements GLSurfaceView.Re
         Matrix.setIdentityM(mEnv.getModelMatrix(), 0);
         Matrix.setRotateM(mEnv.getRotateMatrix(), 0, mDeltaX, 0.0f, 1.0f, 0.0f);
         Matrix.rotateM(mEnv.getRotateMatrix(), 0, mDeltaY, 1.0f, 0.0f, 0.0f);
+        Matrix.rotateM(mEnv.getRotateMatrix(), 0, mDeltaZ, 0.0f, 0.0f, 1.0f);
         mDeltaX = 0.0f;
         mDeltaY = 0.0f;
+        mDeltaZ = 0.0f;
 
         Matrix.multiplyMM(mEnv.getTempMatrix(), 0, mEnv.getRotateMatrix(), 0, mEnv.getAccumulatedRotateMatrix(), 0);
         System.arraycopy(mEnv.getTempMatrix(), 0, mEnv.getAccumulatedRotateMatrix(), 0, 16);
